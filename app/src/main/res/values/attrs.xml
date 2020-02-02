@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyScrollBar">
+        <attr name="direction" format="enum" >
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="scrollMode" format="enum" >
+            <enum name="direct" value="0"/>
+            <enum name="relative" value="1"/>
+        </attr>
+<!--        Only applicable for relative scroll_mode-->
+        <attr name="scrollRate" format="float" />
+        <attr name="thumbStyle" format="enum" >
+            <enum name="normal" value="0"/>
+            <enum name="progress" value="1"/>
+        </attr>
+        <attr name="positionMax" format="float" />
+        <attr name="position" format="float" />
+        <attr name="thumbWidth" format="float" />
+        <attr name="boundingColor" format="color" />
+        <attr name="thumbColor" format="color" />
+    </declare-styleable>
+</resources>
