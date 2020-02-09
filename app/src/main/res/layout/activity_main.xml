@@ -6,8 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/songList"
+        android:id="@+id/playList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fadeScrollbars="false"
@@ -18,38 +27,32 @@
         app:fastScrollHorizontalTrackDrawable="@android:drawable/btn_dropdown"
         app:fastScrollVerticalThumbDrawable="@android:drawable/btn_dialog"
         app:fastScrollVerticalTrackDrawable="@android:drawable/dark_header"
-        app:layout_constraintBottom_toTopOf="@+id/songSeek"
-        app:layout_constraintEnd_toStartOf="@+id/songScroll"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBottom_toTopOf="@+id/songInfoMain"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
-    <com.example.musicapp.MyScrollBar
-        android:id="@+id/songSeek"
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <include
+        android:id="@+id/songInfoMain"
+        layout="@layout/current_song_info"
         android:layout_width="0dp"
-        android:layout_height="30dp"
-        app:direction="horizontal"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintStart_toStartOf="@+id/songList"
-        app:position="300"
-        app:positionMax="600"
-        app:scrollMode="relative"
-        app:scrollRate="30"
-        app:thumbStyle="progress" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <com.example.musicapp.MyScrollBar
-        android:id="@+id/songScroll"
-        android:layout_width="20dp"
-        android:layout_height="0dp"
-        app:direction="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/songList"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/playList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:scrollMode="direct"
-        app:thumbStyle="normal" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/play" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

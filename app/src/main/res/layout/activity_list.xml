@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".ListActivity">
+
+<include
+    android:id="@+id/include"
+    layout="@layout/top_bar"
+    android:layout_width="0dp"
+    android:layout_height="40dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadeScrollbars="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarSize="20dp"
+        app:fastScrollEnabled="false"
+        app:fastScrollHorizontalThumbDrawable="@android:drawable/btn_dropdown"
+        app:fastScrollHorizontalTrackDrawable="@android:drawable/btn_dropdown"
+        app:fastScrollVerticalThumbDrawable="@android:drawable/btn_dialog"
+        app:fastScrollVerticalTrackDrawable="@android:drawable/dark_header"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toStartOf="@+id/songScroll"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.example.musicapp.MyScrollBar
+    android:id="@+id/songScroll"
+    android:layout_width="20dp"
+    android:layout_height="0dp"
+    app:direction="vertical"
+    app:layout_constraintBottom_toBottomOf="@+id/playList"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/include"
+    app:layout_constraintVertical_bias="0.0"
+    app:scrollMode="direct"
+    app:thumbStyle="normal" />
+
+    <include
+        android:id="@+id/include4"
+        layout="@layout/current_song_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

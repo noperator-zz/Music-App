@@ -15,7 +15,7 @@
             <enum name="normal" value="0"/>
             <enum name="progress" value="1"/>
         </attr>
-        <attr name="positionMax" format="float" />
+<!--        <attr name="positionMax" format="float" />-->
         <attr name="position" format="float" />
         <attr name="thumbWidth" format="float" />
         <attr name="boundingColor" format="color" />

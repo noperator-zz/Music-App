@@ -25,7 +25,7 @@ class MyScrollBar(context: Context, attrs: AttributeSet) : View(context, attrs) 
     var thumbWidth: Float;
     var thumbStyle: Int // 0 normal, 1 progress
     var mPosition: Float = 0.0f;
-    var positionMax: Float = 1.0f;
+    val positionMax: Float = 1.0f;
     var boundingColor: Color;
     var thumbColor: Color;
     var onChanged: ((position: Float)->Unit)? = null
@@ -57,10 +57,11 @@ class MyScrollBar(context: Context, attrs: AttributeSet) : View(context, attrs) 
                 scrollRate = getFloat(R.styleable.MyScrollBar_scrollRate, 0.1f)
                 thumbStyle = getInteger(R.styleable.MyScrollBar_thumbStyle, 0)
                 thumbWidth = getFloat(R.styleable.MyScrollBar_thumbWidth, if (thumbStyle == 0) 0.1f else 0.0f)
-                setMax(getFloat(R.styleable.MyScrollBar_positionMax, 1.0f))
+//                setMax(getFloat(R.styleable.MyScrollBar_positionMax, 1.0f))
                 setPercent(getFloat(R.styleable.MyScrollBar_position, 0.0f) / positionMax)
                 boundingColor = getColor(R.styleable.MyScrollBar_boundingColor, Color.LTGRAY).toColor()
                 thumbColor = getColor(R.styleable.MyScrollBar_thumbColor, Color.parseColor("#7dbeff")).toColor()
+
 
                 DPI = if (isVert()) mDisplayMetric.ydpi else mDisplayMetric.xdpi
                 prevPosition = mPosition
@@ -194,12 +195,15 @@ class MyScrollBar(context: Context, attrs: AttributeSet) : View(context, attrs) 
         requestLayout()
     }
 
-    fun setMax(pos_max: Float) {
-        val new_max = max(0.0f, pos_max)
-
-        val percent = mPosition / new_max // recalculate current percent based on new max
-        positionMax = pos_max
-        setPercent(percent) // in case max was set to less than position
-    }
+//    fun setScrollRate(rate : Float) {
+//        scrollRate = rate
+//    }
+//    fun setMax(pos_max: Float) {
+//        val new_max = max(0.0f, pos_max)
+//
+//        val percent = mPosition / new_max // recalculate current percent based on new max
+//        positionMax = pos_max
+//        setPercent(percent) // in case max was set to less than position
+//    }
 
 }

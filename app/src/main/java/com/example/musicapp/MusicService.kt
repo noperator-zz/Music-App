@@ -8,50 +8,45 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.IBinder
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.os.PowerManager
 import android.os.Binder
-import com.example.musicapp.MusicService.MusicBinder
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.media.AudioFocusRequest
 import android.app.NotificationChannel
 import android.graphics.Color
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
 
 
 class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
     MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener  {
 
+    private fun log(text : String) {
+        Log.e("MusicService", text)
+    }
+
     //media player
     private lateinit var player: MediaPlayer
     private val musicBind = MusicBinder()
-    private lateinit var currentSong: SongModel;
+    private lateinit var currentPath: String;
     private val NOTIFY_ID = 1
     private val NOTIFICATION_CHANNEL_ID = "com.example.musicapp"
     private lateinit var audioManager: AudioManager
     private lateinit var audioFocusRequest: AudioFocusRequest
 
-    fun setSong(path: SongModel) {
-        currentSong = path
+    fun setSong(path: String) {
+        log("set " + path)
+        currentPath = path
     }
 
     fun playSong() {
+        log("play " + currentPath)
         player.reset();
         try {
-            player.setDataSource(currentSong.path)
+            player.setDataSource(currentPath)
         } catch (e: Exception) {
-            Log.e("MUSIC SERVICE", "Error setting data source", e)
+            log("Error setting data source" + e)
         }
         player.prepareAsync();
     }
@@ -66,6 +61,14 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
 
     fun isPng(): Boolean {
         return player.isPlaying
+    }
+
+    fun togglePause() {
+        if (isPng()) {
+            pausePlayer()
+        } else {
+            go()
+        }
     }
 
     fun pausePlayer() {
@@ -91,6 +94,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     override fun onCreate() {
         //create the service
         super.onCreate()
+        log("create")
         //create player
         player = MediaPlayer()
         initMusicPlayer();
@@ -98,11 +102,19 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
         requestAudioFocus(this)
     }
 
+    override fun onStart(intent: Intent?, startId: Int) {
+        super.onStart(intent, startId)
+        log("start")
+    }
+
     override fun onDestroy() {
+        log("destroy")
         stopForeground(true);
+        super.onDestroy()
     }
 
     fun requestAudioFocus(audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener) {
+        log("request focus")
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_MEDIA)
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -117,11 +129,12 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun abandonAudioFocus() {
+        log("abandon focus")
         audioManager.abandonAudioFocusRequest(audioFocusRequest)
     }
 
     override fun onAudioFocusChange(focusChange: Int) {
-        Log.e("focus", focusChange.toString())
+        log("focus" + focusChange.toString())
         if ((AudioManager.AUDIOFOCUS_LOSS == focusChange) ||
          (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT == focusChange)) {
             pausePlayer()
@@ -131,6 +144,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     fun initMusicPlayer() {
+        log("init")
         //set player properties
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
@@ -140,10 +154,12 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     override fun onBind(intent: Intent): IBinder {
+        log("bind")
         return musicBind
     }
 
     override fun onUnbind(intent: Intent): Boolean {
+        log("unbind")
         player.stop()
         player.release()
         return false
@@ -155,6 +171,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     override fun onPrepared(mp: MediaPlayer) {
+        log("prepared")
         //start playback
         mp.start()
 
@@ -177,10 +194,10 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
 
         val not = builder.setContentIntent(pendInt)
             .setSmallIcon(R.drawable.play)
-            .setTicker(currentSong.title)
+            .setTicker(currentPath)
             .setOngoing(true)
             .setContentTitle("Playing")
-            .setContentText(currentSong.title)
+            .setContentText(currentPath)
             .setPriority(NotificationManager.IMPORTANCE_MIN)
             .setCategory(Notification.CATEGORY_SERVICE).build()
 
@@ -188,6 +205,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     override fun onCompletion(mp: MediaPlayer) {
+        log("complete")
         if (player.currentPosition > 0) {
             mp.reset()
             playNext()
@@ -195,6 +213,7 @@ class MusicService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnEr
     }
 
     override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
+        log("error")
         mp.reset()
         return false
     }
